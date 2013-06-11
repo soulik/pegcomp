@@ -1,6 +1,8 @@
 ﻿require 'lpeg'
 local peg = require 'peg'
 
+-- testing grammar from: http://www.inf.puc-rio.br/~roberto/lpeg/#grammar
+
 local p = [[
 S <- 'a' B / 'b' A / ''
 A <- 'a' S / 'b' A A
@@ -15,7 +17,7 @@ equalcount = lpeg.P{
 } * -1
 
 local test_str = [[aabb]]
-local pattern = peg.compile(p, "S")
+local pattern = peg.compile(p, "S", -1)
 
 print(equalcount:match(test_str))
 print(pattern:match(test_str))

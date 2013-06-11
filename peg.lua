@@ -6,7 +6,7 @@
 	returns lpeg_pattern
 ]]--
 
-local function compile(g, S0name, _debug)
+local function compile(g, S0name, quantifier, _debug)
 	local P = lpeg.P
 	local C = lpeg.C
 	local Ct = lpeg.Ct
@@ -78,6 +78,7 @@ local function compile(g, S0name, _debug)
 	TI(t, S0name)
 	for i,line in ipairs(lines:match(g)) do
 		t[line[1]] = (function()
+			
 			wr("%q = ", tostring(line[1]))
 			local def_list
 			for _, _def in ipairs(line[2]) do
@@ -104,9 +105,14 @@ local function compile(g, S0name, _debug)
 			end
 			return def_list
 		end)()
+		
 		wr("\n")
 	end
-	return P(t) * -1
+	if quantifier then
+		return P(t) * quantifier
+	else
+		return P(t)
+	end
 end
 
 return {
